@@ -14,10 +14,8 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->unsignedBigInteger('post_id');
-            $table->unsignedBigInteger('parent_cat_id');
-            $table->foreign('post_id')->references('id')->on('posts');
-            $table->foreign('parent_cat_id')->references('id')->on('categories')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->foreign('parent_id')->references('id')->on('categories')->nullable();
             $table->timestamps();
             $table->softDeletes('deleted_at', precision: 0);
         });
