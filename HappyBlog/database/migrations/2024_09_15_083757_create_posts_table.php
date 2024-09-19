@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title')->unique();
             $table->text('content');
             $table->unsignedBigInteger('author');
             $table->foreign('author')->references('id')->on('users');
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->timestamps();
             $table->softDeletes('deleted_at', precision: 0);
         });
