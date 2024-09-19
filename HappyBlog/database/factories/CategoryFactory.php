@@ -19,7 +19,7 @@ class CategoryFactory extends Factory
     {
         $has_parent = rand(1,3) >=2;
         return [
-            'title' => fake()->title(),
+            'title' => ucfirst(fake()->word()),
             'parent_id' => $has_parent?Category::inRandomOrder()->first()->id ?? Category::factory():null
         ];
     }

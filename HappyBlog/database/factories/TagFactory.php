@@ -18,8 +18,7 @@ class TagFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->title(),
-            'post_id' => Post::inRandomOrder()->first()->id ?? Post::factory(),
+            'title' => ucfirst(fake()->word()),
         ];
     }
 }
