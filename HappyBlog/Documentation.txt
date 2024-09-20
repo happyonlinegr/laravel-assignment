@@ -1,0 +1,21 @@
+-- DESIGN DESICIONS
+ 1)I followed laravel's 'default' way of doing things, guided by its documentation.
+ 2)I used postman to test my endpoints.PostMan's collection has been provided at(HappyBlog\HappyBlog.postman_collection.json)
+ 3)I created Seeders for all of my models resulting in the creation of at least 5 of each.
+ 4)Maillable is sent locally.
+
+-- CHALLENGES I FACED
+ 1) Project structure: 
+    Using laravel for the first time,i found myself stalling quite some times.
+ 2) Decomposition:
+    Getting familiar with laravel's approach to model handling and its relational structures took some time.
+ 3) Unfamiliarity:
+    Packages,using libraries.
+ 4) Mail Notification:
+    Did not use an SMTP.
+
+-- CHALLENGES OVERCOME
+ 1)striding into unfamilliar grounds:
+    I overcome my main problem of  by using laravels Documentation,online guides and forums and AI assisting.
+ 2)Used mailable and loger to sent email locally.
+
