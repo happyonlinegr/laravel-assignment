@@ -8,6 +8,7 @@ use App\Models\Post;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
@@ -38,7 +39,6 @@ class PostController extends Controller
             $validate = Validator::make($request->all(),[
                 'title' => ['required','string','max:255'],
                 'content' =>  ['required','string','max:255'],
-                'author' =>  ['required','exists:users,id',],
                 'categories' => ['array'],
                 'categories.*' => ['exists:categories,id',],
                 'tags' => ['array'],
@@ -54,11 +54,11 @@ class PostController extends Controller
             $post = Post::create([
                 'title'=>$request['title'],
                 'content'=>$request['content'],
-                'author'=>$request['author'],
+                'author'=>Auth::user()->id,
                 'slug' => str_replace(' ','_',strtolower($request['title']))
             ]);
 
-            $post->tags()->attach($request['tags']);
+            $post->tags()->syncWithoutDetaching($request['tags']);
 
             $post->categories()->attach($request['categories']);
 
@@ -116,7 +116,6 @@ class PostController extends Controller
             $validateData = Validator::make($request->all(),[
                 'title' => ['string','max:255'],
                 'content' =>  ['string','max:255'],
-                'author' =>  ['exists:users,id',],
                 'categories' => ['array'],
                 'categories.*' => ['exists:categories,id',],
                 'tags' => ['array'],
@@ -140,6 +139,13 @@ class PostController extends Controller
             if(array_key_exists('title',$data)){
                $data['slug'] = str_replace(' ','_',strtolower($data['title']));
             }
+
+            $user = Auth::user();
+            $userId = $post->author;
+            if($user->id != $userId){
+                return response()->json(['error'=>'You are not permited to edit this post.'],401);
+            }
+            $data['author'] = $user->id;
 
             if(array_key_exists('categories',$data)){
                 $post->categories()->sync($data['categories']);
@@ -176,6 +182,12 @@ class PostController extends Controller
 
             if (!$post) {
                 return response()->json(['message' => 'Post not found'], 404);
+            }
+
+            $user = Auth::user();
+            $userId = $post->author;
+            if($user->id != $userId){
+                return response()->json(['error'=>'You are not permited to edit this post.'],401);
             }
 
             $post->categories()->detach();

@@ -13,7 +13,7 @@ class PostObserver
     public function created(Post $post): void
     {
         $tag = Tag::firstOrCreate(['title' => 'new']);    
-        $post->tags()->attach($tag);
+        $post->tags()->syncWithoutDetaching($tag);
     }
 
     /**

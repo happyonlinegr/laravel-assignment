@@ -8,13 +8,14 @@ use App\Models\Comment;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
-    //TODO( Get authenticated user)
     public function store(Request $request , $id):JsonResponse{
         try{
+            $userid = Auth::user()->id;
             $validateId = Validator::make(['id'=>$id],[
                 'id' =>  ['required','integer','exists:posts,id'],
             ]);
@@ -31,7 +32,7 @@ class CommentController extends Controller
 
             $comment = Comment::create([
                 'post_id'=>$id,
-                'user_id'=>1,
+                'user_id'=>$userid,
                 'content'=>$request['content'],
             ]);
 
@@ -47,7 +48,7 @@ class CommentController extends Controller
     public function commentsByUser($id):JsonResponse{
         try{
             $validateId = Validator::make(['id'=>$id],[
-                'id' =>  ['required','integer','exists:posts,id'],
+                'id' =>  ['required','integer','exists:users,id'],
             ]);
             if($validateId->fails()){
                 return response()->json(['error'=>'Comments not found.','message'=>$validateId->errors()],404);
